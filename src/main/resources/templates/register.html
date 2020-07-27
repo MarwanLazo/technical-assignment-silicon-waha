@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Register</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+	integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+	crossorigin="anonymous">
+
+
+</head>
+<body class="p-3 mb-2 bg-info text-white">
+	<div ng-app="registerApp" ng-controller="register">
+		<div class="container">
+
+			<div class="row">
+				<div class="col-md-2"></div>
+				<div class="col-md-8">
+					<div class="card">
+						<div class="card-body">
+							<form>
+								<div class="row">
+
+									<div class="col-md-2"></div>
+									<div class="col-md-4">
+										<div class="form-group">
+											<label for="username"> <span style="color: black;">
+													User Name : </span><input type="text" name="username"
+												class="form-control" id="username" placeholder="User Name"
+												ng-model="username" />
+											</label>
+										</div>
+
+
+
+										<div class="form-group">
+											<label for="email"> <span style="color: black;">
+													User Email :</span> <input type="email" name="email"
+												class="form-control" id="email"
+												placeholder="name@example.com" ng-model="email" /> <!-- ng-change="checkEmail(email)" -->
+											</label>
+										</div>
+										<div class="form-group">
+											<label for="password"> <span style="color: black;">User
+													Password:</span> <input type="password" name="password"
+												class="form-control" id="password" placeholder="password"
+												ng-model="password" />
+											</label>
+										</div>
+
+										<div class="form-group">
+											<label for="mobile"> <span style="color: black;">User
+													Mobile:</span> <input type="tel" name="mobile"
+												class="form-control" id="mobile" placeholder="01000000001"
+												ng-model="mobile" pattern="[0-9]{3} [0-9]{3} [0-9]{4}"
+												maxlength="10" />
+											</label>
+										</div>
+										<div class="form-group">
+											<input type="button" value="register" class="btn btn-primary"
+												ng-click="createUser()" /> <input type="button"
+												value="Log In" class="btn btn-primary"
+												onclick="window.location='/login';" />
+										</div>
+
+
+
+									</div>
+									<div class="col-md-5" ng-if="error">
+										<br> <br>
+										<div class="alert alert-danger" role="alert"
+											ng-repeat="e in error">{{ e.property }} : {{ e.error }}</div>
+
+									</div>
+
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+
+
+
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+		integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+		crossorigin="anonymous"></script>
+
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+
+
+	<script type="text/javascript" src="js/register.js"></script>
+</body>
+</html>

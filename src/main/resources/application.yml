@@ -1,0 +1,23 @@
+dbhost: localhost
+dbusername: root
+dbpassword: root
+dbport: 3306
+dbname: silicon_waha
+
+
+
+server:
+  port: 8588
+  
+spring:
+  datasource:
+    username: root
+    password: root
+    url: jdbc:mysql://${dbhost}:${dbport}/${dbname}?createDatabaseIfNotExist=true
+    jdbcUrl: jdbc:mysql://${dbhost}:${dbport}/${dbname}?createDatabaseIfNotExist=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialization-mode: always
+  jpa:
+#    database: 
+    show-sql: true
+    

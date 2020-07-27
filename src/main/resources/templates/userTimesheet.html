@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>User Timesheet</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+	integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+	crossorigin="anonymous">
+
+
+</head>
+<body class="p-3 mb-2 bg-info text-white">
+	<div ng-app="userTimesheetApp" ng-controller="userTimesheet">
+		<div class="container">
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-body">
+							<form action="logout">
+								<div class="row">
+									<div class="col-md-10">
+										<h5 class="card-title" style="color: black;">{{email}}</h5>
+									</div>
+									<div class="col-md-2">
+										<button class="btn btn-primary" style="float: right;">Logout</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="card">
+				<div class="card-body">
+					<div class="row">
+
+						<div class="col-md-1"></div>
+						<div class="col-md-3">
+
+
+							<div class="form-group">
+								<label for="logInTime" style="color: black;"> Log In
+									Time: <input type="datetime-local" name="logInTime"
+									class="form-control" id="logInTime" ng-model="logInTime" />
+								</label>
+							</div>
+
+							<div class="form-group">
+								<label for="logOutTime" style="color: black;"> Log Out
+									Time: <input type="datetime-local" name="logOutTime"
+									class="form-control" id="logOutTime" ng-model="logOutTime" />
+								</label>
+							</div>
+
+
+							<!-- <div class="form-group">
+								<label for="logType" style="color: black;"> Log Event <select
+									style="width: 235%;" ng-model="logType" class="form-control  "
+									id="logType">
+										<option value="{{'Log_in'}}">{{'Log In'}}</option>
+										<option value="{{'log_out'}}">{{'log Out'}}</option>
+								</select>
+								</label>
+
+							</div> -->
+
+
+							<div class="form-group">
+								<input type="button" value="Log" class="btn btn-primary"
+									ng-click="logUserTimesheet()" />
+							</div>
+
+
+							<div ng-if="error">
+
+								<div class="alert alert-danger" role="alert"
+									ng-repeat="e in error">{{ e.property }} : {{ e.error }}</div>
+
+							</div>
+
+						</div>
+						<div class="col-md-6">
+
+							<table class="table table-bordered table-striped">
+
+								<thead>
+									<tr>
+										<th scope="col" style="text-align: center">Log In Time</th>
+										<th scope="col" style="text-align: center">Log Out Time</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="log in logHistoryArr">
+
+										<td style="text-align: center">{{log.logInTime |
+											date:"dd.MM.yyyy HH:mm"}}</td>
+
+										<td style="text-align: center">{{log.logOutTime |
+											date:"dd.MM.yyyy HH:mm"}}</td>
+
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+		integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+		crossorigin="anonymous"></script>
+
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+
+
+
+
+
+	<script type="text/javascript" src="js/userTimesheet.js"></script>
+
+</body>
+</html>
