@@ -85,6 +85,7 @@ class TechnicalAssignmentApplicationTests {
 		assertEquals(200, status);
 		String content = mvcResult.getResponse().getContentAsString();
 		assertEquals(content, mapToJson(authUser));
+		userService.delete(authUser);
 	}
 
 	@Test
