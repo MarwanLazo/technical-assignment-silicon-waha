@@ -12,9 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -56,16 +53,6 @@ public class ExceptionAdvice {
 		errors.add(new ConstraintError(ex.getProperty(), ex.getErrorMessage()));
 		log.error(errors);
 		return new ResponseEntity<Object>(errors, new HttpHeaders(), HttpStatus.BAD_REQUEST);
-	}
-
-	@Getter
-	@AllArgsConstructor
-	@ToString
-//	@EqualsAndHashCode
-	public class ConstraintError {
-		private String property;
-		private String error;
-
 	}
 
 }

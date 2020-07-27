@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.EntityManager;
@@ -26,6 +27,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.example.demo.controller.AuthUserController;
+import com.example.demo.log.ConstraintError;
 import com.example.demo.model.AuthUser;
 import com.example.demo.model.UserTimesheet;
 import com.example.demo.service.AuthUserService;
@@ -48,17 +50,44 @@ class TechnicalAssignmentApplicationTests {
 
 	private @Autowired UserDetailsService userDetailsService;
 
-	protected String mapToJson(Object obj) throws JsonProcessingException {
+	/**
+	 * 
+	 * @param obj
+	 * @return
+	 * @throws JsonProcessingException
+	 * 
+	 *                                 Map DTO To Json Object
+	 * 
+	 */
+	private String mapToJson(Object obj) throws JsonProcessingException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		return objectMapper.writeValueAsString(obj);
 	}
 
-	protected <T> T mapFromJson(String json, Class<T> clazz)
+	/**
+	 * 
+	 * @param <T>
+	 * @param json
+	 * @param clazz
+	 * @return
+	 * @throws JsonParseException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 * 
+	 *                              map json object To DTO
+	 */
+	private <T> T mapFromJson(String json, Class<T> clazz)
 			throws JsonParseException, JsonMappingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		return objectMapper.readValue(json, clazz);
 	}
 
+	/**
+	 * 
+	 * @throws Exception
+	 * 
+	 *                   Test API load all users
+	 */
 	@Test
 	public void getAllAuthUser() throws Exception {
 
@@ -70,6 +99,13 @@ class TechnicalAssignmentApplicationTests {
 		AuthUser[] users = mapFromJson(content, AuthUser[].class);
 		assertTrue(users.length > 0);
 	}
+
+	/**
+	 * 
+	 * @throws Exception
+	 * 
+	 *                   Test API Create User
+	 */
 
 	@Test
 	public void createAuthUser() throws Exception {
@@ -88,6 +124,12 @@ class TechnicalAssignmentApplicationTests {
 		userService.delete(authUser);
 	}
 
+	/**
+	 * 
+	 * @throws Exception
+	 * 
+	 *                   Test Check API Validation Create User
+	 */
 	@Test
 	public void checkCreateAuthUserValidation() throws Exception {
 		AuthUser authUser = new AuthUser("user251@domain.net", "user1", "user122555555", "0100152478");
@@ -104,6 +146,10 @@ class TechnicalAssignmentApplicationTests {
 		assertEquals(content, "[{\"property\":\"password\",\"error\":\"size must be between 3 and 8\"}]");
 	}
 
+	/**
+	 * 
+	 * @throws Exception Test Update User API
+	 */
 	@Test
 	public void updateAuthUser() throws Exception {
 		AuthUser authUser = new AuthUser("user1@domain.net", "user1", "user123", "0111110000");
@@ -120,6 +166,11 @@ class TechnicalAssignmentApplicationTests {
 		assertEquals(content, mapToJson(authUser));
 	}
 
+	/**
+	 * Test delete User API
+	 * 
+	 * @throws Exception
+	 */
 	@Test
 	public void deleteAuthUser() throws Exception {
 
@@ -131,6 +182,9 @@ class TechnicalAssignmentApplicationTests {
 		assertEquals(content, "user1@domain.net");
 	}
 
+	/**
+	 * Test User Service CRUD
+	 */
 	@Test
 	void contextLoadUser() {
 		AuthUser t = new AuthUser("user2@domain.net", "user2", "user2", "0100152478");
@@ -147,6 +201,10 @@ class TechnicalAssignmentApplicationTests {
 		assertThat(t).isEqualTo(userService.delete(t));
 		userService.delete(t);
 	}
+
+	/**
+	 * Test User Time Sheet service CRUD
+	 */
 
 	@Test
 	void contextLoadTimesheet() {
@@ -166,20 +224,18 @@ class TechnicalAssignmentApplicationTests {
 
 	}
 
+	/**
+	 * Load all time sheet by User
+	 * 
+	 * @throws Exception
+	 */
+
 	@Test
 	public void getAllTimesheet() throws Exception {
 
 		AuthUser user = userService.getUserByEmail("admin@domain.net");
 		UserTimesheet t = new UserTimesheet(null, user, new Date(), new Date());
 		timesheetService.create(t);
-
-//		MvcResult mvcResult = MockMvcBuilders.webAppContextSetup(webApplicationContext).build()
-//				.perform(MockMvcRequestBuilders.get("/timesheet").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
-//		int status = mvcResult.getResponse().getStatus();
-//		assertEquals(200, status);
-//		String content = mvcResult.getResponse().getContentAsString();
-//		UserTimesheet[] users = mapFromJson(content, UserTimesheet[].class);
-//		assertTrue(users.length > 0);
 
 		MvcResult mvcResult = MockMvcBuilders
 				.webAppContextSetup(webApplicationContext).build().perform(MockMvcRequestBuilders
@@ -190,29 +246,163 @@ class TechnicalAssignmentApplicationTests {
 		String content = mvcResult.getResponse().getContentAsString();
 		UserTimesheet[] users = mapFromJson(content, UserTimesheet[].class);
 		assertTrue(users.length > 0);
+	}
 
+	/**
+	 * Test API to Create Time Sheet
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void createTimesheet() throws Exception {
+
+		AuthUser user = userService.getUserByEmail("admin@domain.net");
 		UserTimesheet userTSH = new UserTimesheet(null, user, new Date(), new Date());
 		String inputJson = mapToJson(userTSH);
+		MvcResult mvcResult = MockMvcBuilders.webAppContextSetup(webApplicationContext).build()
+				.perform(MockMvcRequestBuilders.post("/timesheet/create/".concat(user.getEmail()))
+						.contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson))
+				.andReturn();
+
+		int status = mvcResult.getResponse().getStatus();
+		assertEquals(200, status);
+		String content = mvcResult.getResponse().getContentAsString();
+		UserTimesheet userTsheet = mapFromJson(content, UserTimesheet.class);
+		userTSH.setId(userTsheet.getId());
+		assertEquals(mapToJson(userTSH), mapToJson(userTsheet));
+
+		timesheetService.delete(userTSH);
+
+	}
+
+	/**
+	 * Test Insert User time sheet validation (null, exceed Current Time ,log time
+	 * Interval conflict)
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void createTimesheetWithConflectInterval() throws Exception {
+
+		AuthUser user = userService.getUserByEmail("admin@domain.net");
+
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date());
+		c.set(Calendar.HOUR, c.get(Calendar.HOUR) - 3);
+		Date loginTime = c.getTime();
+
+		c.clear();
+		c.setTime(new Date());
+		c.set(Calendar.HOUR, c.get(Calendar.HOUR) + 3);
+		Date logOutTime = c.getTime();
+
+		UserTimesheet userTSH = new UserTimesheet(null, user, loginTime, logOutTime);
+		UserTimesheet saved = timesheetService.create(userTSH);
+
+		// booth login/logout null
+		userTSH = new UserTimesheet(null, user, null, null);
+		String inputJson = mapToJson(userTSH);
+		MvcResult mvcResult = MockMvcBuilders.webAppContextSetup(webApplicationContext).build()
+				.perform(MockMvcRequestBuilders.post("/timesheet/create/".concat(user.getEmail()))
+						.contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson))
+				.andReturn();
+
+		int status = mvcResult.getResponse().getStatus();
+		assertEquals(400, status);
+		String content = mvcResult.getResponse().getContentAsString();
+		ConstraintError[] errors = mapFromJson(content, ConstraintError[].class);
+		assertTrue(errors.length > 0);
+
+		// booth login/logout Exceed Now can't log out after some time
+		c.clear();
+		c.setTime(new Date());
+		c.set(Calendar.HOUR, c.get(Calendar.HOUR) + 5);
+		loginTime = c.getTime();
+
+		c.clear();
+		c.setTime(new Date());
+		c.set(Calendar.HOUR, c.get(Calendar.HOUR) + 5);
+		logOutTime = c.getTime();
+		userTSH = new UserTimesheet(null, user, loginTime, logOutTime);
+
+		inputJson = mapToJson(userTSH);
 		mvcResult = MockMvcBuilders.webAppContextSetup(webApplicationContext).build()
 				.perform(MockMvcRequestBuilders.post("/timesheet/create/".concat(user.getEmail()))
 						.contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson))
 				.andReturn();
 
 		status = mvcResult.getResponse().getStatus();
-		assertEquals(200, status);
+		assertEquals(400, status);
 		content = mvcResult.getResponse().getContentAsString();
-		UserTimesheet userTsheet = mapFromJson(content, UserTimesheet.class);
-		userTSH.setId(userTsheet.getId());
-		assertEquals(mapToJson(userTSH), mapToJson(userTsheet));
+		errors = mapFromJson(content, ConstraintError[].class);
+		assertTrue(errors.length > 0);
+		// Interval logging conflict
+		c.clear();
+		c.setTime(new Date());
+		c.set(Calendar.HOUR, c.get(Calendar.HOUR) - 1);
+		loginTime = c.getTime();
 
-		timesheetService.delete(t);
+		c.clear();
+		c.setTime(new Date());
+		c.set(Calendar.HOUR, c.get(Calendar.HOUR) + 5);
+		logOutTime = c.getTime();
+
+		userTSH = new UserTimesheet(null, user, loginTime, logOutTime);
+
+		inputJson = mapToJson(userTSH);
+		mvcResult = MockMvcBuilders.webAppContextSetup(webApplicationContext).build()
+				.perform(MockMvcRequestBuilders.post("/timesheet/create/".concat(user.getEmail()))
+						.contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson))
+				.andReturn();
+
+		status = mvcResult.getResponse().getStatus();
+		assertEquals(400, status);
+		content = mvcResult.getResponse().getContentAsString();
+		errors = mapFromJson(content, ConstraintError[].class);
+		assertTrue(errors.length > 0);
+
+		timesheetService.delete(userTSH);
+		timesheetService.delete(saved);
 
 	}
+
+	/**
+	 * UserDetailsService Test GEt user
+	 */
 
 	@Test
 	public void testUserDetailsService() {
 		assertThat(userDetailsService.loadUserByUsername("admin@domain.net").getUsername())
 				.isEqualTo("admin@domain.net");
+	}
+
+	/**
+	 * Test API checkEmailExist
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void checkEmailExist() throws Exception {
+
+		String email = "notsavedOne@domain.net";
+		MvcResult mvcResult = MockMvcBuilders.webAppContextSetup(webApplicationContext).build().perform(
+				MockMvcRequestBuilders.get("/checkEmailExist/".concat(email)).accept(MediaType.APPLICATION_JSON_VALUE))
+				.andReturn();
+		int status = mvcResult.getResponse().getStatus();
+		assertEquals(200, status);
+		String content = mvcResult.getResponse().getContentAsString();
+		assertEquals(content, "");
+
+		email = "admin@domain.net";
+		mvcResult = MockMvcBuilders.webAppContextSetup(webApplicationContext).build().perform(
+				MockMvcRequestBuilders.get("/checkEmailExist/".concat(email)).accept(MediaType.APPLICATION_JSON_VALUE))
+				.andReturn();
+		status = mvcResult.getResponse().getStatus();
+		assertEquals(400, status);
+		content = mvcResult.getResponse().getContentAsString();
+		ConstraintError[] errors = mapFromJson(content, ConstraintError[].class);
+		assertTrue(errors.length > 0);
+
 	}
 
 }

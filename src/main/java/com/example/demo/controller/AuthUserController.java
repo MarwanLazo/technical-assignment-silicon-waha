@@ -109,11 +109,11 @@ public class AuthUserController {
 	/**
 	 * 
 	 * @param username
-	 * @return get user by email
+	 * @return get user by email (checkEmailExist)
 	 */
 
-	@GetMapping(value = "/checkEmail/{email}")
-	public AuthUser getAuthUserByEamil(@PathVariable String email) {
+	@GetMapping(value = "/checkEmailExist/{email}")
+	public AuthUser checkEmailExist(@PathVariable String email) {
 		log.info(String.format("AuthUser getAuthUserByEamil(%s)", email));
 		AuthUser authUser = service.getUserByEmail(email);
 		log.info(authUser);

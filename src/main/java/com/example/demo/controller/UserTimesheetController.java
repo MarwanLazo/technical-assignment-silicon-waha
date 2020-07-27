@@ -59,7 +59,7 @@ public class UserTimesheetController {
 		}
 
 		if (tSheet.getLogInTime().after(new Date()) || tSheet.getLogOutTime().after(new Date())) {
-			throw new DateValidationException("logInTime/logOutTime", "both must be before or equal now ");
+			throw new DateValidationException("logInTime/logOutTime", "both must be before or equal now");
 		}
 
 		if (tSheet.getLogInTime().after(tSheet.getLogOutTime())) {
