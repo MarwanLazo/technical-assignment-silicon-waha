@@ -38,7 +38,7 @@ public class TechnicalAssignmentApplication {
 		@EventListener(classes = ApplicationReadyEvent.class)
 		public void intialize() {
 			log.info("void intialize()  Start");
-			AuthUser user = service.create(new AuthUser("admin@domain.net", "admin", "admin", "012543625478"));
+			AuthUser user = service.create(new AuthUser("admin@domain.net", "admin", "admin", "01234567801"));
 			log.info(String.format("load user %s Success", user));
 		}
 	}
