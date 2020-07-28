@@ -33,6 +33,6 @@ System setup:
 
 Run the system: 
    Use the link : http://localhost:8588/login  then register and login then start timesheet login / logout times.
-   be care not conflict logging interval ,
+ 
 
 
