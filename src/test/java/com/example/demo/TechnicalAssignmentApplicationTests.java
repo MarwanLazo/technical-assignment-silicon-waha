@@ -109,7 +109,7 @@ class TechnicalAssignmentApplicationTests {
 
 	@Test
 	public void createAuthUser() throws Exception {
-		AuthUser authUser = new AuthUser("user177@domain.net", "user1", "user1", "0100152478");
+		AuthUser authUser = new AuthUser("user177@domain.net", "user1", "user1", "01236547890");
 
 		String inputJson = mapToJson(authUser);
 		MvcResult mvcResult = MockMvcBuilders.webAppContextSetup(webApplicationContext).build()
@@ -132,7 +132,7 @@ class TechnicalAssignmentApplicationTests {
 	 */
 	@Test
 	public void checkCreateAuthUserValidation() throws Exception {
-		AuthUser authUser = new AuthUser("user251@domain.net", "user1", "user122555555", "0100152478");
+		AuthUser authUser = new AuthUser("user251@domain.net", "user1", "user122555555", "01236547890");
 
 		String inputJson = mapToJson(authUser);
 		MvcResult mvcResult = MockMvcBuilders.webAppContextSetup(webApplicationContext).build()
@@ -152,7 +152,7 @@ class TechnicalAssignmentApplicationTests {
 	 */
 	@Test
 	public void updateAuthUser() throws Exception {
-		AuthUser authUser = new AuthUser("user1@domain.net", "user1", "user123", "0111110000");
+		AuthUser authUser = new AuthUser("user1@domain.net", "user1", "user123", "01236547890");
 
 		String inputJson = mapToJson(authUser);
 		MvcResult mvcResult = MockMvcBuilders
@@ -187,7 +187,7 @@ class TechnicalAssignmentApplicationTests {
 	 */
 	@Test
 	void contextLoadUser() {
-		AuthUser t = new AuthUser("user2@domain.net", "user2", "user2", "0100152478");
+		AuthUser t = new AuthUser("user2@domain.net", "user2", "user2", "01236547890");
 		userService.create(t);
 		assertThat(t).isEqualTo(userService.create(t));
 
