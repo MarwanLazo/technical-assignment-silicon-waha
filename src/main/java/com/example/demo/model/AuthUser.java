@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
@@ -42,7 +43,8 @@ public class AuthUser {
 	@Column(name = "password")
 	private String password;
 
-	
+
+	@Pattern(regexp = "(^$|[0-9]{11})", message = "Mobile Must be digits only and length=11")
 	@Column(name = "mobile")
 	private String mobile;
 
