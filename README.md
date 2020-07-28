@@ -30,7 +30,7 @@ System setup:
      - Password : root
      - Port: 3306
      - Host : localhost 
-     - Schema : silicon-waha
+     - Schema : silicon_waha
 
 Run the system: 
    Use the link : http://localhost:8588/login  then register and login then start timesheet login / logout times.
